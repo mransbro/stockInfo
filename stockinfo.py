@@ -8,6 +8,17 @@ import PySimpleGUI as sg
 Program to output data about a stock
 """
 
+# To do
+# add error handling on incorrect stock symbol
+# improve GUI wording and look
+# close first GUI window after popup
+# Add confirmation popup on company
+# Add graphs and data to excel
+# add buy/sell rating, maybe
+
+
+
+
 
 def main():
     layout = [
@@ -15,7 +26,7 @@ def main():
         [sg.Text('Enter stock symbol'), sg.InputText()],
         [sg.Text('Choose A Folder', size=(35, 1))],
         [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
-        sg.InputText('Default Folder'), sg.FolderBrowse()],
+            sg.InputText('Default Folder'), sg.FolderBrowse()],
         [sg.Button('Ok'), sg.Button('Cancel')]
     ]
 
