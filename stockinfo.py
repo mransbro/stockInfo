@@ -1,7 +1,4 @@
 import yfinance as yf
-
-import xlsxwriter
-
 import PySimpleGUI as sg
 
 """
@@ -9,20 +6,14 @@ Program to output data about a stock
 """
 
 # To do
-# add error handling on incorrect stock symbol
 # improve GUI wording and look
 # close first GUI window after popup
-# Add confirmation popup on company
 # Add graphs and data to excel
 # add buy/sell rating, maybe
 
 
-
-
-
 def main():
     layout = [
-        [sg.Text('Stock Research')],
         [sg.Text('Enter stock symbol'), sg.InputText()],
         [sg.Text('Choose A Folder', size=(35, 1))],
         [sg.Text('Your Folder', size=(15, 1), auto_size_text=False, justification='right'),
@@ -37,24 +28,36 @@ def main():
         if event in (None, 'Cancel'):
             break
         elif event == 'Ok':
-            i = stockInfo(values[0])
-            saveInfo(i, values[1])
+            symbol = values[0]
+            path = values[1]
+            saveInfo(stockInfo(symbol), path)
     window.close()
 
 
 def stockInfo(symbol):
 
     s = yf.Ticker(symbol)
-    name = s.info['shortName']
-    return(name)
+
+    try:
+        info = s.info
+    except:
+        sg.popup('Oops something went wrong.')
+        raise SystemExit
+
+    global company
+    company = info['shortName']
+    sg.popup_ok_cancel(f'Getting information on {company}. Is that correct?')
+    return(info)
 
 
-def saveInfo(info, path):
-    filepath = path + '/' + info
+def saveInfo(data, path):
+
+    filepath = f"{path}/{data['symbol']}"
+
     with open(filepath, 'w') as f:
-        f.write(info)
+        f.write(str(data))
 
-    sg.popup(f'Stock info for {info} saved to {filepath} ')
+    sg.popup(f'Stock info for {company} saved to {filepath}')
 
 
 main()
